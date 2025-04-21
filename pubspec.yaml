@@ -1,0 +1,30 @@
+name: femvitalis
+description: "A new Flutter project."
+publish_to: 'none' 
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.7.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  animated_text_kit: ^4.2.2  # Optional for typing effect
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/logo.png
+    - assets/images/img2.png
+    - assets/images/img3.png
+    - assets/images/img4.png
+    # Add more images if needed later
+    # - assets/images/hands.png
