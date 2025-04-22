@@ -531,6 +531,7 @@ class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateM
   String? _selectedGender;
   bool _agreedToTerms = false;
   bool _isOtpSent = false;
+  bool _isOtpVerified = false;
 
   // Animation controller for form
   late AnimationController _formAnimController;
@@ -583,18 +584,76 @@ class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateM
   }
 
   void _sendOtp() {
-    setState(() {
-      _isOtpSent = true;
-    });
-    // TODO: Add real OTP logic
+    if (_phoneController.text.isNotEmpty) {
+      setState(() {
+        _isOtpSent = true;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('OTP sent to your mobile number'),
+          backgroundColor: Color(0xFF6A3EA1),
+        ),
+      );
+      // TODO: Add real OTP logic
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter your mobile number'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  void _verifyOtp() {
+    if (_otpController.text.isNotEmpty) {
+      // For demo purposes, any 4-digit OTP is considered valid
+      // In a real app, this would validate against a server
+      if (_otpController.text.length >= 4) {
+        setState(() {
+          _isOtpVerified = true;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('OTP verified successfully'),
+            backgroundColor: Color(0xFF6A3EA1),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Invalid OTP. Please try again.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter OTP'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   void _resendOtp() {
-    // TODO: Resend OTP logic
+    // Reset OTP verification status when resending
+    setState(() {
+      _isOtpVerified = false;
+    });
+    
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('OTP resent to your mobile number'),
+        backgroundColor: Color(0xFF6A3EA1),
+      ),
+    );
+    // TODO: Add real OTP resend logic
   }
 
   void _register() {
-    if (_formKey.currentState!.validate() && _agreedToTerms) {
+    if (_formKey.currentState!.validate() && _agreedToTerms && _isOtpVerified) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Processing Registration'),
@@ -609,13 +668,40 @@ class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateM
           backgroundColor: Colors.red,
         ),
       );
+    } else if (!_isOtpVerified) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please verify your mobile number'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
+  }
+
+  InputDecoration _inputDecoration(String label, IconData icon, {Widget? suffixIcon}) {
+    return InputDecoration(
+      labelText: label,
+      prefixIcon: Icon(icon, color: const Color(0xFF6A3EA1)),
+      suffixIcon: suffixIcon,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15),
+        borderSide: const BorderSide(color: Color(0xFF512C7D)),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15),
+        borderSide: const BorderSide(color: Color(0xFF512C7D)),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15),
+        borderSide: const BorderSide(color: Color(0xFF6A3EA1), width: 2),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       backgroundColor: const Color(0xFFFDF3ED),
+      backgroundColor: const Color(0xFFFDF3ED),
       body: SafeArea(
         child: FadeTransition(
           opacity: _formOpacityAnimation,
@@ -686,53 +772,93 @@ class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateM
                     ),
                     const SizedBox(height: 16),
 
-                    // Phone & OTP
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 3,
-                          child: TextFormField(
-                            controller: _phoneController,
-                            decoration: _inputDecoration(
-                              'Mobile Number',
-                              Icons.phone,
-                              suffixIcon: !_isOtpSent
-                                  ? IconButton(
-                                      icon: const Icon(Icons.send, color: Color(0xFF6A3EA1)),
-                                      onPressed: _sendOtp,
-                                    )
-                                  : null,
-                            ),
-                            keyboardType: TextInputType.phone,
-                            validator: (value) => value == null || value.isEmpty
-                                ? 'Please enter your mobile number'
-                                : null,
-                          ),
-                        ),
-                        if (_isOtpSent) const SizedBox(width: 12),
-                        if (_isOtpSent)
-                          Expanded(
-                            flex: 2,
-                            child: Column(
-                              children: [
-                                TextFormField(
-                                  controller: _otpController,
-                                  decoration: _inputDecoration('OTP', Icons.password),
-                                  obscureText: true,
-                                  keyboardType: TextInputType.number,
-                                ),
-                                TextButton(
-                                  onPressed: _resendOtp,
-                                  child: const Text('Resend OTP',
-                                      style: TextStyle(fontSize: 12, color: Colors.red)),
-                                ),
-                              ],
-                            ),
-                          ),
-                      ],
+                    // Mobile Number
+                    TextFormField(
+                      controller: _phoneController,
+                      decoration: _inputDecoration(
+                        'Mobile Number',
+                        Icons.phone,
+                        suffixIcon: !_isOtpSent
+                            ? IconButton(
+                                icon: const Icon(Icons.send, color: Color(0xFF6A3EA1)),
+                                onPressed: _sendOtp,
+                              )
+                            : null,
+                      ),
+                      keyboardType: TextInputType.phone,
+                      validator: (value) => value == null || value.isEmpty
+                          ? 'Please enter your mobile number'
+                          : null,
                     ),
                     const SizedBox(height: 16),
+
+                    // OTP Section
+                    if (_isOtpSent)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: TextFormField(
+                                  controller: _otpController,
+                                  decoration: _inputDecoration('Enter OTP', Icons.password),
+                                  keyboardType: TextInputType.number,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                flex: 1,
+                                child: ElevatedButton.icon(
+                                  onPressed: _isOtpVerified ? null : _verifyOtp,
+                                  icon: Icon(
+                                    _isOtpVerified ? Icons.check_circle : Icons.verified_user,
+                                    color: Colors.white,
+                                  ),
+                                  label: Text(
+                                    'Verify',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: _isOtpVerified
+                                        ? Colors.green
+                                        : const Color(0xFF512C7D),
+                                    padding: const EdgeInsets.symmetric(vertical: 16),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              Text(
+                                'OTP Sent To Given Mobile No ',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey[700],
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: _resendOtp,
+                                child: const Text(
+                                  'Resend OTP',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                        ],
+                      ),
 
                     // Age & Gender
                     Row(
@@ -752,8 +878,7 @@ class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateM
                             padding: const EdgeInsets.symmetric(horizontal: 12),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),
-                              border: Border.all(color: const Color(0xFF512C7D)
-),
+                              border: Border.all(color: const Color(0xFF512C7D)),
                             ),
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton<String>(
@@ -851,10 +976,17 @@ class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateM
                           },
                           activeColor: const Color(0xFF512C7D),
                         ),
-                        const Expanded(
-                          child: Text(
-                            'I agree to the Terms & Conditions',
-                            style: TextStyle(fontSize: 14),
+                        const Text('Agree to '),
+                        GestureDetector(
+                          onTap: () {
+                            // TODO: Show Terms & Conditions
+                          },
+                          child: const Text(
+                            'Terms & Conditions',
+                            style: TextStyle(
+                              color: Color(0xFF6A3EA1),
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ],
@@ -865,16 +997,19 @@ class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateM
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: _register,
+                        onPressed: (_isOtpVerified && _agreedToTerms) ? _register : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF512C7D),
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
+                          disabledBackgroundColor: Colors.grey,
                         ),
-                        child: const Text('Register', style: TextStyle(
-                           color: Color.fromARGB(255, 244, 241, 241),fontSize: 16)),
+                        child: const Text(
+                          'Register', 
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -885,9 +1020,9 @@ class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateM
                       children: [
                         const Text('Already have an account?'),
                         TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/login');
-              },
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/login');
+                          },
                           child: const Text(
                             'Sign In',
                             style: TextStyle(color: Color(0xFF6A3EA1)),
@@ -901,23 +1036,6 @@ class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateM
             ),
           ),
         ),
-      ),
-    );
-  }
-
-  InputDecoration _inputDecoration(String label, IconData icon, {Widget? suffixIcon}) {
-    return InputDecoration(
-      labelText: label,
-      prefixIcon: Icon(icon, color: const Color(0xFF512C7D)
-),
-      suffixIcon: suffixIcon,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(15),
-        borderSide: const BorderSide(color: Color(0xFF6A3EA1)),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(15),
-        borderSide: const BorderSide(color: Color(0xFF6A3EA1)),
       ),
     );
   }
