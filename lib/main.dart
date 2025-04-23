@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-
+import 'cycle_tracking_dashboard.dart';
+import 'pregnancy_dashboard.dart';
+import 'new_mother_dashboard.dart';
 void main() {
   runApp(const FemVitalisApp());
 }
@@ -22,6 +24,10 @@ class FemVitalisApp extends StatelessWidget {
         '/signup': (context) => const SignupPage(),
         '/login': (context) => const LoginPage(),
         '/forgot-password': (context) => const ForgotPasswordPage(), // Use proper widget here
+        '/goal-selection': (context) => const GoalSelectionScreen(),
+         '/cycle-tracking-dashboard': (context) => const CycleTrackingDashboard(),
+        '/pregnancy-dashboard': (context) => const PregnancyDashboard(),
+        '/new-mother-dashboard': (context) => const NewMotherDashboard(),
       },
       initialRoute: '/',
     );
@@ -114,7 +120,7 @@ class _SplashScreenState extends State<SplashScreen>
         height: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFFFFD1DC), Color(0xFFF3E5F5)],
+            colors: [ Color.fromARGB(255, 232, 200, 180), Color(0xFFF3E5F5)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -372,20 +378,24 @@ class _FullScreenOnboardingPageState extends State<FullScreenOnboardingPage>
   Widget build(BuildContext context) {
     
     final Size screenSize = MediaQuery.of(context).size;
-    final double contentHeight = screenSize.height * 0.4; // 40% for content
+    final double contentHeight = screenSize.height * 0.42; // 40% for content
 
     return Stack(
-      children: [
-  Positioned.fill(
-    child: Image.asset(
-      widget.content.image,
-      fit: BoxFit.cover,
-      width: double.infinity,
-      height: double.infinity,
-    ),
-  ),
+    children: [
+      // Background color (matches image)
+      Container(
+        color: const Color.fromARGB(255, 249, 230, 219), // Match the image background
+      ),
 
-        
+      // Centered image, not filling behind the white container
+      Align(
+        alignment: Alignment.topCenter,
+        child: Image.asset(
+          widget.content.image,
+          height: screenSize.height * 0.65,
+          fit: BoxFit.contain,
+        ),
+      ),
         // Semi-circle white overlay with animated content
         Positioned(
           bottom: 0,
@@ -402,8 +412,8 @@ class _FullScreenOnboardingPageState extends State<FullScreenOnboardingPage>
               boxShadow: [
                 BoxShadow(
                   color: Colors.black26,
-                  blurRadius: 15,
-                  offset: Offset(0, -5),
+                  blurRadius: 20,
+                  offset: Offset(0, -4),
                 ),
               ],
             ),
@@ -1097,17 +1107,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
     super.dispose();
   }
 
-  void _login() {
-    if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Logging in...'),
-          backgroundColor: Color(0xFF6A3EA1),
-        ),
-      );
-      // TODO: Add login logic
-    }
-  }
+  // Removed unused _login method
 
   @override
   Widget build(BuildContext context) {
@@ -1201,7 +1201,11 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: _login,
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            Navigator.pushReplacementNamed(context, '/goal-selection');
+                          }
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF6A3EA1),
                           padding: const EdgeInsets.symmetric(vertical: 14),
@@ -1371,6 +1375,203 @@ class ForgotPasswordPage extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+class GoalSelectionScreen extends StatelessWidget {
+  const GoalSelectionScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFFDF3ED),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Color(0xFFD81B60)),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(height: 10),
+              Text(
+                'Choose your goal',
+                style: TextStyle(
+                  fontSize: 36,
+                  fontWeight: FontWeight.w700,
+                  color: Theme.of(context).primaryColor,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 10),
+              Expanded(
+                child: ListView(
+                  children: const [
+                    GoalCard(
+                      title: '\Cycle Tracking & Wellness',
+                      subtitle: 'Track your cycle, fertility, and learn about key health conditions like PCOS, menopause, and cancer.',
+                      color: Color.fromARGB(255, 194, 226, 231),
+                      imagePath: 'assets/images/img5.png',
+                       routeName: '/cycle-tracking-dashboard',
+                    ),
+                    SizedBox(height: 50),
+                    GoalCard(
+                      title: 'Track pregnancy and get insights',
+                      subtitle: 'Track favorable days for conception',
+                      color: Color.fromARGB(255, 240, 57, 115),
+                      imagePath: 'assets/images/img6.png',
+                      routeName: '/pregnancy-dashboard',
+                    ),
+                    SizedBox(height: 40),
+                    GoalCard(
+                      title: 'New mother',
+                      subtitle: 'Track postpartum recovery and baby care',
+                      color: Color.fromARGB(255, 241, 198, 234),
+                      imagePath: 'assets/images/img7.png',
+                       routeName: '/new-mother-dashboard',
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class GoalCard extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final Color color;
+  final String imagePath;
+  final String routeName;
+
+  const GoalCard({
+    Key? key,
+    required this.title,
+    required this.subtitle,
+    required this.color,
+    required this.imagePath,
+    required this.routeName, 
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 250,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Stack(
+        children: [
+          Positioned(
+            right: 0,
+            top: 0,
+            bottom: 0,
+            width: 350,
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topRight: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              ),
+              child: Opacity(
+                opacity: 0.9,
+                child: Image.asset(
+                  imagePath,
+                  fit: BoxFit.cover,
+                  alignment: Alignment.centerRight,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      color: color.withOpacity(0.4),
+                      child: const Center(
+                        child: Icon(
+                          Icons.image_outlined,
+                          size: 100,
+                          color: Color(0xFFFDF3ED),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF333333),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    SizedBox(
+                      width: 180,
+                      child: Text(
+                        subtitle,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey[800],
+                          height: 1.4,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(routeName);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:  const Color(0xFF512C7D),
+                      minimumSize: const Size(110, 42),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                      elevation: 3,
+                      shadowColor: const Color.fromARGB(255, 255, 254, 254),
+                    ),
+                    child: const Text(
+                      'Choose',
+                      style: TextStyle( color: Color.fromARGB(255, 244, 241, 241),fontSize: 18)
+
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

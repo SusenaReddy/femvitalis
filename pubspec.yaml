@@ -26,5 +26,8 @@ flutter:
     - assets/images/img2.png
     - assets/images/img3.png
     - assets/images/img4.png
+    - assets/images/img5.png
+    - assets/images/img6.png
+    - assets/images/img7.png
     # Add more images if needed later
     # - assets/images/hands.png
