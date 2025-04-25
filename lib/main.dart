@@ -1380,7 +1380,7 @@ class ForgotPasswordPage extends StatelessWidget {
   }
 }
 class GoalSelectionScreen extends StatelessWidget {
-  const GoalSelectionScreen({Key? key}) : super(key: key);
+  const GoalSelectionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -1417,7 +1417,7 @@ class GoalSelectionScreen extends StatelessWidget {
                 child: ListView(
                   children: const [
                     GoalCard(
-                      title: '\Cycle Tracking & Wellness',
+                      title: 'Cycle Tracking & Wellness',
                       subtitle: 'Track your cycle, fertility, and learn about key health conditions like PCOS, menopause, and cancer.',
                       color: Color.fromARGB(255, 194, 226, 231),
                       imagePath: 'assets/images/img5.png',
@@ -1458,13 +1458,13 @@ class GoalCard extends StatelessWidget {
   final String routeName;
 
   const GoalCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.subtitle,
     required this.color,
     required this.imagePath,
     required this.routeName, 
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

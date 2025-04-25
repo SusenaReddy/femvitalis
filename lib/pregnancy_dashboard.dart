@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class PregnancyDashboard extends StatelessWidget {
-  const PregnancyDashboard({Key? key}) : super(key: key);
+  const PregnancyDashboard({super.key});
 
   @override
   Widget build(BuildContext context) {
