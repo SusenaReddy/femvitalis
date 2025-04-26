@@ -3,7 +3,19 @@ import 'dart:async';
 import 'cycle_tracking_dashboard.dart';
 import 'pregnancy_dashboard.dart';
 import 'new_mother_dashboard.dart';
-void main() {
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: FirebaseOptions(
+      apiKey: 'AIzaSyB9r2OOO5sJCeHEL1exuNWpl6GZdKioDV8',
+      appId: '1:803526502098:android:ce67a23f6aa24f804c2f0b',
+      messagingSenderId: '803526502098',
+      projectId: 'femvitalis-6f5b6',
+    ),
+  );
   runApp(const FemVitalisApp());
 }
 
@@ -23,9 +35,11 @@ class FemVitalisApp extends StatelessWidget {
         '/': (context) => const SplashScreen(),
         '/signup': (context) => const SignupPage(),
         '/login': (context) => const LoginPage(),
-        '/forgot-password': (context) => const ForgotPasswordPage(), // Use proper widget here
+        '/forgot-password':
+            (context) => const ForgotPasswordPage(), // Use proper widget here
         '/goal-selection': (context) => const GoalSelectionScreen(),
-         '/cycle-tracking-dashboard': (context) => const CycleTrackingDashboard(),
+        '/cycle-tracking-dashboard':
+            (context) => const CycleTrackingDashboard(),
         '/pregnancy-dashboard': (context) => const PregnancyTracker(),
         '/new-mother-dashboard': (context) => const NewMotherDashboard(),
       },
@@ -33,7 +47,6 @@ class FemVitalisApp extends StatelessWidget {
     );
   }
 }
-
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -71,9 +84,10 @@ class _SplashScreenState extends State<SplashScreen>
       duration: const Duration(milliseconds: 1600),
     );
 
-    _textOpacity = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _textController, curve: Curves.easeIn),
-    );
+    _textOpacity = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _textController, curve: Curves.easeIn));
 
     _textScale = Tween<double>(begin: 0.8, end: 1.0).animate(
       CurvedAnimation(parent: _textController, curve: Curves.elasticOut),
@@ -91,8 +105,8 @@ class _SplashScreenState extends State<SplashScreen>
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) =>
-              const NextPage(),
+          pageBuilder:
+              (context, animation, secondaryAnimation) => const NextPage(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(opacity: animation, child: child);
           },
@@ -115,12 +129,11 @@ class _SplashScreenState extends State<SplashScreen>
 
     return Scaffold(
       body: Container(
-        
         width: double.infinity,
         height: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [ Color.fromARGB(255, 232, 200, 180), Color(0xFFF3E5F5)],
+            colors: [Color.fromARGB(255, 232, 200, 180), Color(0xFFF3E5F5)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -148,14 +161,12 @@ class _SplashScreenState extends State<SplashScreen>
                 child: ScaleTransition(
                   scale: _textScale,
                   child: ShaderMask(
-                    shaderCallback: (bounds) => const LinearGradient(
-                      colors: [
-                       Color(0xFF512C7D),
-                      Color(0xFF6E44AA),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ).createShader(bounds),
+                    shaderCallback:
+                        (bounds) => const LinearGradient(
+                          colors: [Color(0xFF512C7D), Color(0xFF6E44AA)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ).createShader(bounds),
                     child: const Text(
                       'FemVitalis',
                       style: TextStyle(
@@ -223,7 +234,7 @@ class _NextPageState extends State<NextPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    
+
     // Initialize animation controllers for each page
     _animationControllers = List.generate(
       _totalPages,
@@ -232,13 +243,16 @@ class _NextPageState extends State<NextPage> with TickerProviderStateMixin {
         duration: const Duration(milliseconds: 400),
       ),
     );
-    
-    _fadeAnimations = _animationControllers
-        .map((controller) => Tween<double>(begin: 0.0, end: 1.0).animate(
-              CurvedAnimation(parent: controller, curve: Curves.easeIn),
-            ))
-        .toList();
-    
+
+    _fadeAnimations =
+        _animationControllers
+            .map(
+              (controller) => Tween<double>(begin: 0.0, end: 1.0).animate(
+                CurvedAnimation(parent: controller, curve: Curves.easeIn),
+              ),
+            )
+            .toList();
+
     // Start the first animation
     _animationControllers[0].forward();
   }
@@ -271,14 +285,14 @@ class _NextPageState extends State<NextPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       backgroundColor: const Color(0xFFFDF3ED),
+      backgroundColor: const Color(0xFFFDF3ED),
       body: PageView.builder(
         controller: _pageController,
         onPageChanged: (index) {
           setState(() {
             _currentPage = index;
           });
-          
+
           // Trigger animation for the new page
           _animationControllers[index].forward(from: 0.0);
         },
@@ -342,24 +356,24 @@ class _FullScreenOnboardingPageState extends State<FullScreenOnboardingPage>
   @override
   void initState() {
     super.initState();
-    
+
     // Text animation setup
     _textAnimController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 600),
     );
-    
+
     _textOpacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _textAnimController, curve: Curves.easeIn),
     );
-    
+
     _textSlideAnimation = Tween<Offset>(
       begin: const Offset(0.0, 0.25),
       end: Offset.zero,
     ).animate(
       CurvedAnimation(parent: _textAnimController, curve: Curves.easeOutCubic),
     );
-    
+
     // Start animation with a slight delay
     Future.delayed(const Duration(milliseconds: 200), () {
       if (mounted) {
@@ -376,26 +390,30 @@ class _FullScreenOnboardingPageState extends State<FullScreenOnboardingPage>
 
   @override
   Widget build(BuildContext context) {
-    
     final Size screenSize = MediaQuery.of(context).size;
     final double contentHeight = screenSize.height * 0.42; // 40% for content
 
     return Stack(
-    children: [
-      // Background color (matches image)
-      Container(
-        color: const Color.fromARGB(255, 249, 230, 219), // Match the image background
-      ),
-
-      // Centered image, not filling behind the white container
-      Align(
-        alignment: Alignment.topCenter,
-        child: Image.asset(
-          widget.content.image,
-          height: screenSize.height * 0.65,
-          fit: BoxFit.contain,
+      children: [
+        // Background color (matches image)
+        Container(
+          color: const Color.fromARGB(
+            255,
+            249,
+            230,
+            219,
+          ), // Match the image background
         ),
-      ),
+
+        // Centered image, not filling behind the white container
+        Align(
+          alignment: Alignment.topCenter,
+          child: Image.asset(
+            widget.content.image,
+            height: screenSize.height * 0.65,
+            fit: BoxFit.contain,
+          ),
+        ),
         // Semi-circle white overlay with animated content
         Positioned(
           bottom: 0,
@@ -455,7 +473,7 @@ class _FullScreenOnboardingPageState extends State<FullScreenOnboardingPage>
                       ),
                     ),
                   ),
-                  
+
                   // Bottom navigation
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -465,13 +483,10 @@ class _FullScreenOnboardingPageState extends State<FullScreenOnboardingPage>
                         onPressed: widget.onSkip,
                         child: const Text(
                           'Skip',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey,
-                          ),
+                          style: TextStyle(fontSize: 16, color: Colors.grey),
                         ),
                       ),
-                      
+
                       // Dots indicator with improved animation
                       Row(
                         children: List.generate(
@@ -483,14 +498,15 @@ class _FullScreenOnboardingPageState extends State<FullScreenOnboardingPage>
                             height: 10,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
-                              color: widget.currentPage == index
-                                  ? Theme.of(context).primaryColor
-                                  : Colors.grey.shade300,
+                              color:
+                                  widget.currentPage == index
+                                      ? Theme.of(context).primaryColor
+                                      : Colors.grey.shade300,
                             ),
                           ),
                         ),
                       ),
-                      
+
                       // Next button
                       ElevatedButton(
                         onPressed: widget.onNext,
@@ -525,8 +541,6 @@ class _FullScreenOnboardingPageState extends State<FullScreenOnboardingPage>
   }
 }
 
-
-
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
 
@@ -534,7 +548,8 @@ class SignupPage extends StatefulWidget {
   State<SignupPage> createState() => _SignupPageState();
 }
 
-class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateMixin {
+class _SignupPageState extends State<SignupPage>
+    with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
@@ -555,7 +570,8 @@ class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateM
   final TextEditingController _otpController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   @override
   void initState() {
@@ -652,7 +668,7 @@ class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateM
     setState(() {
       _isOtpVerified = false;
     });
-    
+
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('OTP resent to your mobile number'),
@@ -688,7 +704,11 @@ class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateM
     }
   }
 
-  InputDecoration _inputDecoration(String label, IconData icon, {Widget? suffixIcon}) {
+  InputDecoration _inputDecoration(
+    String label,
+    IconData icon, {
+    Widget? suffixIcon,
+  }) {
     return InputDecoration(
       labelText: label,
       prefixIcon: Icon(icon, color: const Color(0xFF6A3EA1)),
@@ -730,7 +750,11 @@ class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateM
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset('assets/images/logo.png', height: 60, width: 60),
+                          Image.asset(
+                            'assets/images/logo.png',
+                            height: 60,
+                            width: 60,
+                          ),
                           const SizedBox(width: 10),
                           const Text(
                             'FemVitalis',
@@ -767,8 +791,11 @@ class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateM
                     TextFormField(
                       controller: _nameController,
                       decoration: _inputDecoration('Full Name', Icons.person),
-                      validator: (value) =>
-                          value == null || value.isEmpty ? 'Please enter your name' : null,
+                      validator:
+                          (value) =>
+                              value == null || value.isEmpty
+                                  ? 'Please enter your name'
+                                  : null,
                     ),
                     const SizedBox(height: 16),
 
@@ -777,8 +804,11 @@ class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateM
                       controller: _emailController,
                       decoration: _inputDecoration('Email Id', Icons.email),
                       keyboardType: TextInputType.emailAddress,
-                      validator: (value) =>
-                          value == null || value.isEmpty ? 'Please enter your email' : null,
+                      validator:
+                          (value) =>
+                              value == null || value.isEmpty
+                                  ? 'Please enter your email'
+                                  : null,
                     ),
                     const SizedBox(height: 16),
 
@@ -788,17 +818,23 @@ class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateM
                       decoration: _inputDecoration(
                         'Mobile Number',
                         Icons.phone,
-                        suffixIcon: !_isOtpSent
-                            ? IconButton(
-                                icon: const Icon(Icons.send, color: Color(0xFF6A3EA1)),
-                                onPressed: _sendOtp,
-                              )
-                            : null,
+                        suffixIcon:
+                            !_isOtpSent
+                                ? IconButton(
+                                  icon: const Icon(
+                                    Icons.send,
+                                    color: Color(0xFF6A3EA1),
+                                  ),
+                                  onPressed: _sendOtp,
+                                )
+                                : null,
                       ),
                       keyboardType: TextInputType.phone,
-                      validator: (value) => value == null || value.isEmpty
-                          ? 'Please enter your mobile number'
-                          : null,
+                      validator:
+                          (value) =>
+                              value == null || value.isEmpty
+                                  ? 'Please enter your mobile number'
+                                  : null,
                     ),
                     const SizedBox(height: 16),
 
@@ -813,7 +849,10 @@ class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateM
                                 flex: 2,
                                 child: TextFormField(
                                   controller: _otpController,
-                                  decoration: _inputDecoration('Enter OTP', Icons.password),
+                                  decoration: _inputDecoration(
+                                    'Enter OTP',
+                                    Icons.password,
+                                  ),
                                   keyboardType: TextInputType.number,
                                 ),
                               ),
@@ -823,7 +862,9 @@ class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateM
                                 child: ElevatedButton.icon(
                                   onPressed: _isOtpVerified ? null : _verifyOtp,
                                   icon: Icon(
-                                    _isOtpVerified ? Icons.check_circle : Icons.verified_user,
+                                    _isOtpVerified
+                                        ? Icons.check_circle
+                                        : Icons.verified_user,
                                     color: Colors.white,
                                   ),
                                   label: Text(
@@ -831,10 +872,13 @@ class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateM
                                     style: TextStyle(color: Colors.white),
                                   ),
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: _isOtpVerified
-                                        ? Colors.green
-                                        : const Color(0xFF512C7D),
-                                    padding: const EdgeInsets.symmetric(vertical: 16),
+                                    backgroundColor:
+                                        _isOtpVerified
+                                            ? Colors.green
+                                            : const Color(0xFF512C7D),
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 16,
+                                    ),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(15),
                                     ),
@@ -876,10 +920,16 @@ class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateM
                         Expanded(
                           child: TextFormField(
                             controller: _ageController,
-                            decoration: _inputDecoration('Age', Icons.accessibility),
+                            decoration: _inputDecoration(
+                              'Age',
+                              Icons.accessibility,
+                            ),
                             keyboardType: TextInputType.number,
-                            validator: (value) =>
-                                value == null || value.isEmpty ? 'Enter age' : null,
+                            validator:
+                                (value) =>
+                                    value == null || value.isEmpty
+                                        ? 'Enter age'
+                                        : null,
                           ),
                         ),
                         const SizedBox(width: 12),
@@ -888,7 +938,9 @@ class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateM
                             padding: const EdgeInsets.symmetric(horizontal: 12),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(15),
-                              border: Border.all(color: const Color(0xFF512C7D)),
+                              border: Border.all(
+                                color: const Color(0xFF512C7D),
+                              ),
                             ),
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton<String>(
@@ -901,12 +953,15 @@ class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateM
                                   ],
                                 ),
                                 value: _selectedGender,
-                                items: ['Female', 'Male', 'Other'].map((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
+                                items:
+                                    ['Female', 'Male', 'Other'].map((
+                                      String value,
+                                    ) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
                                 onChanged: (newValue) {
                                   setState(() {
                                     _selectedGender = newValue;
@@ -928,7 +983,9 @@ class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateM
                         Icons.lock,
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                            _obscurePassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
                             color: const Color(0xFF512C7D),
                           ),
                           onPressed: () {
@@ -939,8 +996,11 @@ class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateM
                         ),
                       ),
                       obscureText: _obscurePassword,
-                      validator: (value) =>
-                          value == null || value.isEmpty ? 'Enter password' : null,
+                      validator:
+                          (value) =>
+                              value == null || value.isEmpty
+                                  ? 'Enter password'
+                                  : null,
                     ),
                     const SizedBox(height: 16),
 
@@ -952,12 +1012,15 @@ class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateM
                         Icons.lock,
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscureConfirmPassword ? Icons.visibility_off : Icons.visibility,
+                            _obscureConfirmPassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
                             color: const Color(0xFF512C7D),
                           ),
                           onPressed: () {
                             setState(() {
-                              _obscureConfirmPassword = !_obscureConfirmPassword;
+                              _obscureConfirmPassword =
+                                  !_obscureConfirmPassword;
                             });
                           },
                         ),
@@ -1007,7 +1070,10 @@ class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateM
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed: (_isOtpVerified && _agreedToTerms) ? _register : null,
+                        onPressed:
+                            (_isOtpVerified && _agreedToTerms)
+                                ? _register
+                                : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF512C7D),
                           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -1017,7 +1083,7 @@ class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateM
                           disabledBackgroundColor: Colors.grey,
                         ),
                         child: const Text(
-                          'Register', 
+                          'Register',
                           style: TextStyle(color: Colors.white, fontSize: 16),
                         ),
                       ),
@@ -1051,17 +1117,19 @@ class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateM
     );
   }
 }
-InputDecoration _inputDecoration(String label, IconData icon, {Widget? suffixIcon}) {
+
+InputDecoration _inputDecoration(
+  String label,
+  IconData icon, {
+  Widget? suffixIcon,
+}) {
   return InputDecoration(
     labelText: label,
     prefixIcon: Icon(icon),
     suffixIcon: suffixIcon,
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(12),
-    ),
+    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
   );
 }
-
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -1070,7 +1138,8 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixin {
+class _LoginPageState extends State<LoginPage>
+    with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   bool _obscurePassword = true;
   late AnimationController _animController;
@@ -1088,9 +1157,10 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
       duration: const Duration(milliseconds: 700),
     );
 
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _animController, curve: Curves.easeIn),
-    );
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _animController, curve: Curves.easeIn));
 
     _slideAnimation = Tween<Offset>(
       begin: const Offset(0.0, 0.1),
@@ -1113,7 +1183,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       backgroundColor: const Color(0xFFFDF3ED),
+      backgroundColor: const Color(0xFFFDF3ED),
       body: SafeArea(
         child: FadeTransition(
           opacity: _fadeAnimation,
@@ -1131,7 +1201,11 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset('assets/images/logo.png', height: 60, width: 60),
+                          Image.asset(
+                            'assets/images/logo.png',
+                            height: 60,
+                            width: 60,
+                          ),
                           const SizedBox(width: 10),
                           const Text(
                             'FemVitalis',
@@ -1158,10 +1232,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
 
                     const Text(
                       'Login to your account',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Color(0xFF6A3EA1),
-                      ),
+                      style: TextStyle(fontSize: 20, color: Color(0xFF6A3EA1)),
                     ),
                     const SizedBox(height: 30),
 
@@ -1169,8 +1240,11 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                     TextFormField(
                       controller: _emailController,
                       decoration: _inputDecoration('Email', Icons.email),
-                      validator: (value) =>
-                          value == null || value.isEmpty ? 'Please enter email' : null,
+                      validator:
+                          (value) =>
+                              value == null || value.isEmpty
+                                  ? 'Please enter email'
+                                  : null,
                     ),
                     const SizedBox(height: 20),
 
@@ -1182,7 +1256,9 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                         Icons.lock,
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                            _obscurePassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
                             color: const Color(0xFF512C7D),
                           ),
                           onPressed: () {
@@ -1193,8 +1269,11 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                         ),
                       ),
                       obscureText: _obscurePassword,
-                      validator: (value) =>
-                          value == null || value.isEmpty ? 'Please enter password' : null,
+                      validator:
+                          (value) =>
+                              value == null || value.isEmpty
+                                  ? 'Please enter password'
+                                  : null,
                     ),
                     const SizedBox(height: 20),
 
@@ -1204,7 +1283,10 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                       child: ElevatedButton(
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            Navigator.pushReplacementNamed(context, '/goal-selection');
+                            Navigator.pushReplacementNamed(
+                              context,
+                              '/goal-selection',
+                            );
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -1216,20 +1298,23 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                         ),
                         child: const Text(
                           'Login',
-                          style: TextStyle( color: Color.fromARGB(255, 244, 241, 241),fontSize: 18),
+                          style: TextStyle(
+                            color: Color.fromARGB(255, 244, 241, 241),
+                            fontSize: 18,
+                          ),
                         ),
                       ),
                     ),
                     const SizedBox(height: 16),
                     TextButton(
-  onPressed: () {
-    Navigator.pushNamed(context, '/forgot-password');
-  },
-  child: Text(
-    'Forgot Password?',
-    style: TextStyle(color: Color(0xFF512C7D)),
-  ),
-),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/forgot-password');
+                      },
+                      child: Text(
+                        'Forgot Password?',
+                        style: TextStyle(color: Color(0xFF512C7D)),
+                      ),
+                    ),
 
                     // Navigate to Signup
                     TextButton(
@@ -1313,14 +1398,20 @@ class ForgotPasswordPage extends StatelessWidget {
                   prefixIcon: const Icon(Icons.email, color: Color(0xFF512C7D)),
                   hintText: 'Email Id',
                   hintStyle: const TextStyle(color: Color(0xFF512C7D)),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+                  contentPadding: const EdgeInsets.symmetric(
+                    vertical: 18,
+                    horizontal: 16,
+                  ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: const BorderSide(color: Color(0xFF512C7D)),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: Color(0xFF512C7D), width: 2),
+                    borderSide: const BorderSide(
+                      color: Color(0xFF512C7D),
+                      width: 2,
+                    ),
                   ),
                 ),
               ),
@@ -1344,7 +1435,8 @@ class ForgotPasswordPage extends StatelessWidget {
                     'Send Reset Link',
                     style: TextStyle(
                       color: Color.fromARGB(255, 244, 241, 241),
-                      fontSize: 16),
+                      fontSize: 16,
+                    ),
                   ),
                 ),
               ),
@@ -1380,6 +1472,7 @@ class ForgotPasswordPage extends StatelessWidget {
     );
   }
 }
+
 class GoalSelectionScreen extends StatelessWidget {
   const GoalSelectionScreen({super.key});
 
@@ -1419,10 +1512,11 @@ class GoalSelectionScreen extends StatelessWidget {
                   children: const [
                     GoalCard(
                       title: 'Cycle Tracking & Wellness',
-                      subtitle: 'Track your cycle, fertility, and learn about key health conditions like PCOS, menopause, and cancer.',
+                      subtitle:
+                          'Track your cycle, fertility, and learn about key health conditions like PCOS, menopause, and cancer.',
                       color: Color.fromARGB(255, 194, 226, 231),
                       imagePath: 'assets/images/img5.png',
-                       routeName: '/cycle-tracking-dashboard',
+                      routeName: '/cycle-tracking-dashboard',
                     ),
                     SizedBox(height: 50),
                     GoalCard(
@@ -1438,7 +1532,7 @@ class GoalSelectionScreen extends StatelessWidget {
                       subtitle: 'Track postpartum recovery and baby care',
                       color: Color.fromARGB(255, 241, 198, 234),
                       imagePath: 'assets/images/img7.png',
-                       routeName: '/new-mother-dashboard',
+                      routeName: '/new-mother-dashboard',
                     ),
                   ],
                 ),
@@ -1464,7 +1558,7 @@ class GoalCard extends StatelessWidget {
     required this.subtitle,
     required this.color,
     required this.imagePath,
-    required this.routeName, 
+    required this.routeName,
   });
 
   @override
@@ -1554,7 +1648,7 @@ class GoalCard extends StatelessWidget {
                       Navigator.of(context).pushNamed(routeName);
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor:  const Color(0xFF512C7D),
+                      backgroundColor: const Color(0xFF512C7D),
                       minimumSize: const Size(110, 42),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18),
@@ -1564,8 +1658,10 @@ class GoalCard extends StatelessWidget {
                     ),
                     child: const Text(
                       'Choose',
-                      style: TextStyle( color: Color.fromARGB(255, 244, 241, 241),fontSize: 18)
-
+                      style: TextStyle(
+                        color: Color.fromARGB(255, 244, 241, 241),
+                        fontSize: 18,
+                      ),
                     ),
                   ),
                 ),
