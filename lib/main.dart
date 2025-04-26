@@ -4,7 +4,6 @@ import 'cycle_tracking_dashboard.dart';
 import 'pregnancy_dashboard.dart';
 import 'new_mother_dashboard.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,7 +40,14 @@ class FemVitalisApp extends StatelessWidget {
         '/cycle-tracking-dashboard':
             (context) => const CycleTrackingDashboard(),
         '/pregnancy-dashboard': (context) => const PregnancyTracker(),
-        '/new-mother-dashboard': (context) => const NewMotherDashboard(),
+        '/new-mother-dashboard': (context) =>  BabyHomePage(),
+        '/explore': (context) => const HomePages(),
+        '/tools': (context) => HomeScreen(),
+        '/insights': (context) => const InsightsPage(),
+        '/community': (context) => const CommunityPage(),
+        '/activity': (context) => const ActivityTrackerPage(),
+        '/profile': (context) => const ProfilePage(),
+        
       },
       initialRoute: '/',
     );
@@ -678,31 +684,6 @@ class _SignupPageState extends State<SignupPage>
     // TODO: Add real OTP resend logic
   }
 
-  void _register() {
-    if (_formKey.currentState!.validate() && _agreedToTerms && _isOtpVerified) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Processing Registration'),
-          backgroundColor: Color(0xFF6A3EA1),
-        ),
-      );
-      // TODO: Implement registration logic
-    } else if (!_agreedToTerms) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please agree to Terms & Conditions'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    } else if (!_isOtpVerified) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please verify your mobile number'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-  }
 
   InputDecoration _inputDecoration(
     String label,
@@ -1070,10 +1051,9 @@ class _SignupPageState extends State<SignupPage>
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
-                        onPressed:
-                            (_isOtpVerified && _agreedToTerms)
-                                ? _register
-                                : null,
+                        onPressed:() {
+    Navigator.pushNamed(context, '/goal-selection');
+  },            
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF512C7D),
                           padding: const EdgeInsets.symmetric(vertical: 16),
@@ -1085,6 +1065,7 @@ class _SignupPageState extends State<SignupPage>
                         child: const Text(
                           'Register',
                           style: TextStyle(color: Colors.white, fontSize: 16),
+                          
                         ),
                       ),
                     ),
