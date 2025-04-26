@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "803526502098",
+    "project_id": "femvitalis-6f5b6",
+    "storage_bucket": "femvitalis-6f5b6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:803526502098:android:ce67a23f6aa24f804c2f0b",
+        "android_client_info": {
+          "package_name": "com.example.femvitalis"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9r2OOO5sJCeHEL1exuNWpl6GZdKioDV8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
