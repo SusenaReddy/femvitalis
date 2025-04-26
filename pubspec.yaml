@@ -14,6 +14,7 @@ dependencies:
   animated_text_kit: ^4.2.2  # Optional for typing effect
   intl: ^0.18.0
   table_calendar: ^3.0.8
+  flutter_local_notifications: ^12.0.0
 
 dev_dependencies:
   flutter_test:
@@ -31,5 +32,21 @@ flutter:
     - assets/images/img5.png
     - assets/images/img6.png
     - assets/images/img7.png
+    - assets/images/Poppy_seed.jpg
+    - assets/images/Chia_seed.jpg
+    - assets/images/apple_seed.jpg
+    - assets/images/watermelon_seed.jpg
+
+    - assets/images/week1.jpg
+    - assets/images/week2.jpg
+    - assets/images/week3.jpg
+    - assets/images/week4.jpeg
+    - assets/images/week5.jpg
+    - assets/images/week6.jpeg
+    - assets/images/week7.png
+    - assets/images/week8.png
+    - assets/images/week9.png
+    - assets/images/week10.png
+
     # Add more images if needed later
     # - assets/images/hands.png

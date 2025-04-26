@@ -26,7 +26,7 @@ class FemVitalisApp extends StatelessWidget {
         '/forgot-password': (context) => const ForgotPasswordPage(), // Use proper widget here
         '/goal-selection': (context) => const GoalSelectionScreen(),
          '/cycle-tracking-dashboard': (context) => const CycleTrackingDashboard(),
-        '/pregnancy-dashboard': (context) => const PregnancyDashboard(),
+        '/pregnancy-dashboard': (context) => const PregnancyTracker(),
         '/new-mother-dashboard': (context) => const NewMotherDashboard(),
       },
       initialRoute: '/',
@@ -1029,6 +1029,7 @@ class _SignupPageState extends State<SignupPage> with SingleTickerProviderStateM
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text('Already have an account?'),
+
                         TextButton(
                           onPressed: () {
                             Navigator.pushNamed(context, '/login');
