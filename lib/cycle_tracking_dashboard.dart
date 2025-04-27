@@ -246,7 +246,7 @@ class _CycleTrackingDashboardState extends State<CycleTrackingDashboard> {
         child: Container(
           padding: const EdgeInsets.all(10),
           width: double.maxFinite,
-          height: 600,
+          height: 700,
           child: Column(
             children: [
               const Text(
