@@ -139,7 +139,12 @@ flutter:
     - assets/images/size6.jpg
     - assets/images/size7.jpg
     - assets/images/size8.jpg
-
+    - assets/images/organic_care.jpg
+    - assets/images/care_bundle.jpg
+    - assets/images/wellness_box.jpeg
+    - assets/images/moisturizer.jpg
+    - assets/images/tea_set.jpeg
+    - assets/images/vitamins.jpeg
     - assets/images/size9.jpg
     - assets/images/size10.jpg
     - assets/images/size11.jpg

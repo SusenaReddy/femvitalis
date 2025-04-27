@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'shopping.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/explore': (context) => const HomePages(),
         '/tools': (context) => HomeScreen(),
+        '/shopping': (context) => const RewardsPage(),
       },
     
       debugShowCheckedModeBanner: false,
@@ -392,7 +394,10 @@ class _PregnancyTrackerState extends State<PregnancyTracker> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+
+          },
         ),
         title: const Text(
           'Size',
@@ -401,9 +406,14 @@ class _PregnancyTrackerState extends State<PregnancyTracker> {
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 16),
-            child: const CircleAvatar(
-              backgroundColor: Colors.grey,
-              child: Icon(Icons.person, color: Colors.white),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, '/profile');
+              },
+              child: const CircleAvatar(
+                backgroundColor: Colors.grey,
+                child: Icon(Icons.person, color: Colors.white),
+              ),
             ),
           )
         ],
@@ -761,6 +771,19 @@ class _PregnancyTrackerState extends State<PregnancyTracker> {
                     const Text('tools', style: TextStyle(fontSize: 12)),
                   ],
                 ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.shopping_cart),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/shopping');
+                      },
+                      color: Colors.grey,
+                    ),
+                    const Text('Rewards', style: TextStyle(fontSize: 12)),
+                  ],
+                ),
               ],
             ),
           ),
@@ -769,253 +792,168 @@ class _PregnancyTrackerState extends State<PregnancyTracker> {
     );
   }
 }
+
 class HomePages extends StatelessWidget {
   const HomePages({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
+        backgroundColor: Colors.pink[100],
         title: const Text(
-          'Discover',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 32,
-            fontWeight: FontWeight.bold,
-          ),
+          "Women's Health Insights",
+          style: TextStyle(color: Colors.black),
         ),
         actions: [
-          CircleAvatar(
-            backgroundColor: Colors.grey[200],
-            child: const Icon(Icons.person, color: Colors.grey),
+          Container(
+            margin: const EdgeInsets.only(right: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.orange[300],
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.monetization_on, color: Colors.white, size: 16),
+                const SizedBox(width: 4),
+                Text(
+                  '2450', // Example coin balance
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
           ),
-          const SizedBox(width: 16),
         ],
       ),
-      body: const HomeContent(),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.cyan,
-        unselectedItemColor: Colors.grey,
-        currentIndex: 1,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            label: 'Today',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.explore),
-            label: 'Explore',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.work),
-            label: 'Tools',
-          ),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildCategorySection('Week by Week', weekByWeekArticles),
+            _buildCategorySection('Nutrition', nutritionArticles),
+            _buildCategorySection('Body', bodyArticles),
+            _buildCategorySection('Baby', babyArticles),
+            _buildCategorySection('Common Pregnancy Myths', mythsArticles),
+          ],
+        ),
       ),
     );
   }
-}
 
-// home_content.dart
-class HomeContent extends StatelessWidget {
-  const HomeContent({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
+  Widget _buildCategorySection(String category, List<Article> articles) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildCategoryHeader('Week by week', true),
-          _buildWeekByWeekSection(),
-          _buildCategoryHeader('Nutrition', false),
-          _buildArticleSection(nutritionArticles),
-          _buildCategoryHeader('Body', false),
-          _buildArticleSection(bodyArticles),
-          _buildCategoryHeader('Baby', false),
-          _buildArticleSection(babyArticles),
-          _buildCategoryHeader('Common Pregnancy Myths', false),
-          _buildArticleSection(mythsArticles),
-          const SizedBox(height: 20),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCategoryHeader(String title, bool hasViewAll) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              category,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
           ),
-          if (hasViewAll)
-            Text(
-              'See All',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.cyan[400],
-              ),
+          const SizedBox(height: 8),
+          SizedBox(
+            height: 210,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: articles.length,
+              itemBuilder: (context, index) {
+                final article = articles[index];
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ArticleDetailPage(article: article),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    width: 160,
+                    margin: const EdgeInsets.only(right: 16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.3),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ClipRRect(
+                          borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(12)),
+                          child: Image.asset(
+                            article.imageUrl,
+                            height: 120,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            article.title,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '${article.coins} Coins',
+                                style: TextStyle(
+                                  color: Colors.orange[300],
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const Icon(
+                                Icons.monetization_on,
+                                color: Colors.orange,
+                                size: 16,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
+          ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildWeekByWeekSection() {
-    return SizedBox(
-      height: 200,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: weekByWeekArticles.length,
-        itemBuilder: (context, index) {
-          final article = weekByWeekArticles[index];
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ArticleDetailPage(article: article),
-                ),
-              );
-            },
-            child: Container(
-              width: 180,
-              margin: const EdgeInsets.only(right: 16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                image: DecorationImage(
-                  image: AssetImage(article.imageUrl),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: Stack(
-                children: [
-                  Positioned(
-                    top: 12,
-                    left: 12,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: Colors.black54,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Row(
-                        children: const [
-                          Icon(Icons.article, color: Colors.white, size: 16),
-                          SizedBox(width: 4),
-                          Text(
-                            'Articles',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 12,
-                    left: 12,
-                    child: Text(
-                      article.title,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildArticleSection(List<Article> articles) {
-    return SizedBox(
-      height: 200,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: articles.length,
-        itemBuilder: (context, index) {
-          final article = articles[index];
-          return GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ArticleDetailPage(article: article),
-                ),
-              );
-            },
-            child: Container(
-              width: 180,
-              margin: const EdgeInsets.only(right: 16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                image: DecorationImage(
-                  image: AssetImage(article.imageUrl),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: Stack(
-                children: [
-                  Positioned(
-                    top: 12,
-                    left: 12,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: Colors.black54,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Row(
-                        children: const [
-                          Icon(Icons.article, color: Colors.white, size: 16),
-                          SizedBox(width: 4),
-                          Text(
-                            'Articles',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 12,
-                    left: 12,
-                    child: Text(
-                      article.title,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
       ),
     );
   }
 }
 
-// article_detail_page.dart
 class ArticleDetailPage extends StatelessWidget {
   final Article article;
 
@@ -1027,20 +965,83 @@ class ArticleDetailPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(article.title),
         backgroundColor: Colors.teal,
+        actions: [
+          Container(
+            margin: const EdgeInsets.only(right: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.orange[300],
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.monetization_on, color: Colors.white, size: 16),
+                const SizedBox(width: 4),
+                Text(
+                  '${article.coins}',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.asset(
-                article.imageUrl,
-                height: 200,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.asset(
+                    article.imageUrl,
+                    height: 200,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Positioned(
+                  top: 12,
+                  right: 12,
+                  child: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.orange[300],
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.orange[100]!, width: 1),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 2,
+                          offset: const Offset(0, 1),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.monetization_on,
+                            color: Colors.white, size: 16),
+                        const SizedBox(width: 2),
+                        Text(
+                          '${article.coins}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 16),
             Text(
@@ -1104,7 +1105,6 @@ class ArticleDetailPage extends StatelessWidget {
   }
 }
 
-// article.dart
 class Article {
   final String id;
   final String title;
@@ -1112,6 +1112,7 @@ class Article {
   final String category;
   final String content;
   final List<String> relatedArticles;
+  final int coins;
 
   Article({
     required this.id,
@@ -1120,8 +1121,11 @@ class Article {
     required this.category,
     required this.content,
     this.relatedArticles = const [],
+    this.coins = 2,
   });
 }
+
+// Add similar mock data for other categories.
 
 // article_data.dart
 // Week by week articles
@@ -1512,7 +1516,7 @@ final List<Article> babyArticles = [
 Article(
   id: 'baby2',
   title: 'What babies learn in the womb',
-  imageUrl: 'assets/images/baby2.jpeg',
+  imageUrl: 'assets/images/baby2.jpg',
   category: 'Baby',
   content: 'Babies start learning before they’re born! The womb is a sensory-rich environment that helps early development.\n\nWhat babies learn:\n- Recognize familiar voices\n- React to music and emotions\n- Develop taste from amniotic fluid\n\nFun Fact: Babies may show preference for foods the mother eats during pregnancy.',
   relatedArticles: ['Baby brain development', 'Prenatal music effects', 'Mother-baby sensory connection'],
@@ -1714,7 +1718,7 @@ class _HomeScreenState extends State<HomeScreen> {
   SelectedCard selectedCard = SelectedCard.tools;
   DateTime _selectedDay = DateTime.now();
   List<Appointment> appointments = [];
-  int _selectedIndex = 2; // Default to Tools tab
+// Default to Tools tab
   int selectedToolIndex = 0;
 
   List<Map<String, dynamic>> pregnancyData = [
@@ -2041,31 +2045,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: _getPageContent(),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Color(0xFFDC52AE),
-        unselectedItemColor: Colors.grey,
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-            _updateSelectedCard(index);
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            label: 'Today',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.explore),
-            label: 'Explore',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.health_and_safety),
-            label: 'Tools',
-          ),
-        ],
-      ),
     );
   }
 
@@ -2080,19 +2059,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void _updateSelectedCard(int index) {
-    switch (index) {
-      case 0:
-        selectedCard = SelectedCard.today;
-        break;
-      case 1:
-        selectedCard = SelectedCard.bump;
-        break;
-      case 2:
-        selectedCard = SelectedCard.tools;
-        break;
-    }
-  }
+
 
   Widget _getPageContent() {
     switch (selectedCard) {

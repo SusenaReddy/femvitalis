@@ -3,6 +3,7 @@ import 'dart:async';
 import 'cycle_tracking_dashboard.dart';
 import 'pregnancy_dashboard.dart';
 import 'new_mother_dashboard.dart';
+import 'shopping.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,6 +39,7 @@ class FemVitalisApp extends StatelessWidget {
         '/community': (context) => const CommunityPage(),
         '/activity': (context) => const ActivityTrackerPage(),
         '/profile': (context) => const ProfilePage(),
+        '/shopping': (context) => const RewardsPage(),
         
       },
       initialRoute: '/',

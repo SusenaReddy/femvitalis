@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'shopping.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
         '/community': (context) => const CommunityPage(),
         '/activity': (context) => const ActivityTrackerPage(),
         '/profile': (context) => const ProfilePage(),
+        '/shopping': (context) => const RewardsPage(),
 
       },
     );
@@ -507,16 +509,46 @@ class _CycleTrackingDashboardState extends State<CycleTrackingDashboard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(Icons.warning_amber_rounded, color: Colors.orange, size: 24),
-                  const SizedBox(width: 8),
                   Expanded(
-                    child: Text(
-                      "Up to 70% of people with polycystic ovary syndrome (PCOS) don’t know for sure that they have it",
-                      style: const TextStyle(
-                        fontSize: 16, 
-                        fontWeight: FontWeight.bold,
-                      ),
+                    child: Row(
+                      children: [
+                        Icon(Icons.warning_amber_rounded, color: Colors.orange, size: 24),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            "Up to 70% of people with polycystic ovary syndrome (PCOS) don't know for sure that they have it",
+                            style: const TextStyle(
+                              fontSize: 16, 
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: Colors.amber.shade100,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Colors.amber.shade300),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.monetization_on, color: Colors.amber.shade800, size: 16),
+                        const SizedBox(width: 10),
+                        Text(
+                          "5 coins",
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.amber.shade900,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -534,23 +566,29 @@ class _CycleTrackingDashboardState extends State<CycleTrackingDashboard> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(Icons.assignment_outlined, color: Colors.teal),
-                    const SizedBox(width: 12),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          "PCOS self-assessment",
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          "Typically 5 min",
-                          style: TextStyle(fontSize: 13, color: Colors.grey),
+                    Row(
+                      children: [
+                        Icon(Icons.assignment_outlined, color: Colors.teal),
+                        const SizedBox(width: 12),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text(
+                              "PCOS self-assessment",
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              "Typically 5 min",
+                              style: TextStyle(fontSize: 13, color: Colors.grey),
+                            ),
+                          ],
                         ),
                       ],
                     ),
+                    
                   ],
                 ),
               ),
@@ -982,16 +1020,9 @@ Widget _buildSymptomsSection() {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        width: 110,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          color: Colors.purple.shade300,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Center(
-                          child: Icon(Icons.pets, color: Colors.white),
-                        ),
+                      CircleAvatar(
+                        radius: 30,
+                        backgroundImage: const AssetImage('assets/images/profile.jpeg'),
                       ),
                       Text(
                         "${DateFormat('d').format(_selectedDay)} ${DateFormat('MMMM').format(_selectedDay)}",
@@ -1152,7 +1183,7 @@ Widget _buildSymptomsSection() {
     // Handle navigation or action when tapped
     switch (index) {
       case 0:
-        Navigator.pushNamed(context, '/today'); // Example
+        Navigator.pushNamed(context, '/cycle-tracking-dashboard'); // Example
         break;
       case 1:
         Navigator.pushNamed(context, '/insights');
@@ -1166,6 +1197,8 @@ Widget _buildSymptomsSection() {
       case 4:
         Navigator.pushNamed(context, '/profile');
         break;
+        case 5:
+        Navigator.pushNamed(context, '/shopping');
     }
   },
   items: const [
@@ -1189,28 +1222,50 @@ Widget _buildSymptomsSection() {
       icon: Icon(Icons.person_outline),
       label: "Profile",
     ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.shopping_cart_outlined),
+      label: "Shopping",
+    ),
   ],
 ),
     );
   }
 }
-class InsightsPage extends StatelessWidget {
+
+  class InsightsPage extends StatelessWidget {
   const InsightsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Women\'s Health Insights',
-            style: TextStyle(fontWeight: FontWeight.bold)),
-        backgroundColor: const Color.fromARGB(255, 238, 187, 203),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            // Handle navigation back
-          },
-        ),
+  title: const Text('Women\'s Health Insights',
+      style: TextStyle(fontWeight: FontWeight.bold)),
+  backgroundColor: const Color.fromARGB(255, 238, 187, 203),
+  actions: [
+    Padding(
+      padding: const EdgeInsets.only(right: 16.0),
+      child: Row(
+        children: [
+          Icon(
+            Icons.monetization_on, 
+            color: Colors.amber.shade800,
+            size: 20,
+          ),
+          const SizedBox(width: 4),
+          Text(
+            "2450",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: Colors.amber.shade900,
+            ),
+          ),
+        ],
       ),
+    ),
+  ],
+),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -1313,18 +1368,50 @@ class ArticleCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Article image
-            ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(12),
-                topRight: Radius.circular(12),
-              ),
-              child: Image.asset(
-                article.imageUrl,
-                height: 100,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
+            // Article image with coins overlay
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(12),
+                    topRight: Radius.circular(12),
+                  ),
+                  child: Image.asset(
+                    article.imageUrl,
+                    height: 100,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                // Coins indicator
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.amber.shade100.withOpacity(0.9),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.amber.shade300),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.monetization_on, color: Colors.amber.shade800, size: 14),
+                        const SizedBox(width: 0.5),
+                        Text(
+                          "2",  // Points value - you can make this dynamic based on article if needed
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.amber.shade900,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
             // Article title
             Padding(
@@ -2022,7 +2109,7 @@ class CommunityPage extends StatelessWidget {
           children: [
             const Text('Hi, Susena!', style: TextStyle(color: Colors.black, fontSize: 16)),
             const SizedBox(height: 2),
-            Text('120 Wellness Points',
+            Text('2450 Wellness Points',
                 style: TextStyle(color: Colors.teal, fontSize: 12)),
           ],
         ),
@@ -2077,8 +2164,7 @@ class CommunityPage extends StatelessWidget {
                     "Looking for accountability partners for my fitness journey! Anyone interested in joining me? 💪 #FitnessGoals #WomenSupport",
                 likes: 156,
                 comments: 28,
-              ),
-              _buildPost(
+              ),_buildPost(
                 context,
                 userName: 'Lisa Parker',
                 timeAgo: 'Yesterday',
@@ -2238,93 +2324,124 @@ class ActivityTrackerPage extends StatelessWidget {
   }
 
   Widget _buildDailyGoalCard() {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Daily Goal',
-                      style: TextStyle(color: Colors.grey)),
-                  const SizedBox(height: 8),
-                  RichText(
-                    text: const TextSpan(
-                      text: '7,890',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24,
-                          color: Colors.black),
+  return Card(
+    elevation: 2,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    child: Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
                       children: [
-                        TextSpan(
-                          text: ' / 10,000 steps',
-                          style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.grey),
+                        const Text('Daily Goal',
+                            style: TextStyle(color: Colors.grey)),
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: Colors.amber.shade100,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: Colors.amber.shade300),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.monetization_on, color: Colors.amber.shade800, size: 14),
+                              const SizedBox(width: 4),
+                              Text(
+                                "+25 when complete",
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.amber.shade900,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    const SizedBox(height: 8),
+                    RichText(
+                      text: const TextSpan(
+                        text: '7,890',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                            color: Colors.black),
+                        children: [
+                          TextSpan(
+                            text: ' / 10,000 steps',
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _buildGoalStat(Icons.directions_walk, 'Steps', '7,890'),
+                        _buildGoalStat(Icons.nights_stay, 'Sleep', '7h 20m'),
+                        _buildGoalStat(Icons.local_fire_department, 'Calories', '1,842'),
+                        _buildGoalStat(Icons.favorite, 'Heart Rate', '72 BPM'),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 16),
+              // Circle Progress
+              Column(
+                children: [
+                  Stack(
+                    alignment: Alignment.center,
                     children: [
-                      _buildGoalStat(Icons.directions_walk, 'Steps', '7,890'),
-                      _buildGoalStat(Icons.nights_stay, 'Sleep', '7h 20m'),
-                      _buildGoalStat(Icons.local_fire_department, 'Calories', '1,842'),
-                      _buildGoalStat(Icons.favorite, 'Heart Rate', '72 BPM'),
+                      SizedBox(
+                        width: 60,
+                        height: 60,
+                        child: CircularProgressIndicator(
+                          value: 0.79,
+                          strokeWidth: 6,
+                          backgroundColor: Colors.grey.shade200,
+                          color: Colors.red,
+                        ),
+                      ),
+                      const Text('79%', style: TextStyle(fontWeight: FontWeight.bold)),
                     ],
                   ),
                 ],
               ),
-            ),
-            const SizedBox(width: 16),
-            // Circle Progress
-            Column(
-              children: [
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    SizedBox(
-                      width: 60,
-                      height: 60,
-                      child: CircularProgressIndicator(
-                        value: 0.79,
-                        strokeWidth: 6,
-                        backgroundColor: Colors.grey.shade200,
-                        color: Colors.red,
-                      ),
-                    ),
-                    const Text('79%', style: TextStyle(fontWeight: FontWeight.bold)),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
+            ],
+          ),
+        ],
       ),
-    );
-  }
-
-  Widget _buildGoalStat(IconData icon, String label, String value) {
-    return Column(
-      children: [
-        CircleAvatar(
-          radius: 16,
-          backgroundColor: Colors.pink.shade50,
-          child: Icon(icon, size: 18, color: Colors.purple),
-        ),
-        const SizedBox(height: 6),
-        Text(label, style: TextStyle(fontSize: 12, color: Colors.grey)),
-        Text(value, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
-      ],
-    );
-  }
+    ),
+  );
+}
+Widget _buildGoalStat(IconData icon, String label, String value) {
+  return Column(
+    children: [
+      CircleAvatar(
+        radius: 16,
+        backgroundColor: Colors.pink.shade50,
+        child: Icon(icon, size: 18, color: Colors.purple),
+      ),
+      const SizedBox(height: 6),
+      Text(label, style: TextStyle(fontSize: 12, color: Colors.grey)),
+      Text(value, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+    ],
+  );
+}
 
   Widget _buildWeeklyProgressCard() {
     return Card(
@@ -2423,7 +2540,7 @@ class ProfilePage extends StatelessWidget {
                   style: TextStyle(fontSize: 14, color: Colors.black),
                 ),
                 Text(
-                  '120 Wellness Points',
+                  '2450 Wellness Points',
                   style: TextStyle(fontSize: 10, color: Colors.pink),
                 ),
               ],
@@ -2469,7 +2586,7 @@ class ProfilePage extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             const Text(
-              '120 Wellness Points',
+              '2450 Wellness Points',
               style: TextStyle(color: Colors.pink),
             ),
             const SizedBox(height: 16),

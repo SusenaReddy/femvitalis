@@ -330,18 +330,7 @@ class _BabyHomePageState extends State<BabyHomePage> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Color(0xFFD81B60),
-        unselectedItemColor: Color(0xFFAD1457).withOpacity(0.6),
-        backgroundColor: Colors.white,
-        elevation: 12,
-        selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'Records'),
-          BottomNavigationBarItem(icon: Icon(Icons.question_answer), label: 'Q&A'),
-        ],
-      ),
+      
     );
   }
 }
