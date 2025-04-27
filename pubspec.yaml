@@ -14,17 +14,10 @@ dependencies:
   animated_text_kit: ^4.2.2 # Optional for typing effect
   intl: ^0.18.0
   table_calendar: ^3.0.8
-  flutter_local_notifications: ^12.0.0
-  firebase_core: ^3.13.0
   flutter_bloc: ^9.1.0
   hydrated_bloc: ^10.0.0
   path_provider: ^2.1.5
   equatable: ^2.0.7
-  firebase_auth: ^5.5.2
-  cloud_firestore: ^5.6.6
-  firebase_storage: ^12.4.5
-  firebase_messaging: ^15.2.5
-  google_sign_in: ^6.3.0
   provider: ^6.1.4
 
 dev_dependencies:
@@ -68,7 +61,7 @@ flutter:
     - assets/images/body9.jpeg
     - assets/images/body10.jpeg
     - assets/images/baby1.jpeg
-    - assets/images/baby2.jpeg
+    - assets/images/baby2.jpg
     - assets/images/baby3.jpeg
     - assets/images/baby4.jpeg
     - assets/images/baby5.jpeg
@@ -87,6 +80,45 @@ flutter:
     - assets/images/myth8.jpeg
     - assets/images/myth9.jpeg
     - assets/images/myth10.jpeg
+    - assets/images/profile.jpeg
+    - 'assets/images/fig.png'
+    - 'assets/images/grape.jpg'
+    - 'assets/images/raspberry.jpg'
+    - 'assets/images/blueberry.png'
+    - 'assets/images/kumquat.jpg'
+    - assets/images/lime.jpeg
+    - assets/images/lemon.jpeg
+    - assets/images/peach.jpeg
+    - assets/images/apple.png
+    - assets/images/avocado.png
+    - assets/images/pear.jpeg
+    - assets/images/bell_pepper.png
+    - assets/images/mango.jpeg
+    - assets/images/banana.jpeg
+    - assets/images/healthy_breakfast.jpg
+    - assets/images/profile1.png
+    - assets/images/profile2.png
+    - assets/images/carrot.png
+    - assets/images/corn.jpeg
+    - assets/images/grapefruit.jpeg
+    - assets/images/cantaloupe.jpg
+    - assets/images/cauliflower.png
+    - assets/images/lettuce.png
+    - assets/images/cabbage.png
+    - assets/images/eggplant.jpeg
+    - assets/images/butternut_squash.jpg
+    - assets/images/coconut.jpeg
+    - assets/images/pineapple.jpeg
+    - assets/images/jicama.jpeg
+    - assets/images/durian.jpeg
+    - assets/images/cantaloupe.jpg
+    - assets/images/honeydew.jpeg
+    - assets/images/romaine.jpeg
+    - assets/images/swiss_chard.jpeg
+    - assets/images/leek.jpeg
+    - assets/images/watermelon.jpeg
+    - assets/images/pumpkin.jpg
+    - assets/images/size1.jpg
 
 
     - assets/images/week1.jpg
@@ -100,6 +132,94 @@ flutter:
     - assets/images/week9.png
     - assets/images/week10.png
     - assets/images/pcos1.jpg
+    - assets/images/size1.jpg
+    - assets/images/size3.jpg
+    - assets/images/size4.jpg
+    - assets/images/size5.jpg
+    - assets/images/size6.jpg
+    - assets/images/size7.jpg
+    - assets/images/size8.jpg
+
+    - assets/images/size9.jpg
+    - assets/images/size10.jpg
+    - assets/images/size11.jpg
+    - assets/images/size12.jpg
+    - assets/images/size13.jpg
+    - assets/images/size14.jpg
+    - assets/images/size15.jpg
+    - assets/images/size16.jpg
+    - assets/images/size17.jpg
+    - assets/images/size18.jpg
+    - assets/images/size19.jpg
+    - assets/images/size20.jpg
+    - assets/images/size21.jpg
+    - assets/images/size22.jpg
+    - assets/images/size23.jpg
+    - assets/images/size24.jpg
+    - assets/images/size25.jpg
+    - assets/images/size26.jpg
+
+    - assets/images/size27.jpg
+    - assets/images/size28.jpg
+    - assets/images/size29.jpg
+    - assets/images/size30.jpg
+    - assets/images/size31.jpg
+    - assets/images/size32.jpg
+    - assets/images/size33.jpg
+    - assets/images/size34.jpg
+    - assets/images/size35.jpg
+    - assets/images/size36.jpg
+    - assets/images/size37.jpg
+    - assets/images/size38.jpg
+    - assets/images/size39.jpg
+    - assets/images/size40.jpg
+    - assets/images/pcos2.jpg
+    - assets/images/pcos3.png
+    - assets/images/pcos4.jpeg
+    - assets/images/pcos5.jpg
+    - assets/images/pcos6.jpeg
+    - assets/images/pcos7.jpg
+    - assets/images/pcos8.jpg
+    - assets/images/pcos9.jpg
+    - assets/images/pcos10.png
+    - assets/images/endo1.jpg
+    - assets/images/endo2.jpg
+    - assets/images/endo3.png
+    - assets/images/endo4.jpeg
+    - assets/images/endo5.jpeg
+    - assets/images/endo6.jpeg
+    - assets/images/endo7.png
+    - assets/images/endo8.jpg
+    - assets/images/endo9.jpg
+    - assets/images/endo10.jpeg
+    - assets/images/bc1.png
+    - assets/images/bc2.png
+    - assets/images/bc3.jpg
+    - assets/images/bc4.jpeg
+    - assets/images/bc5.jpeg
+    - assets/images/bc6.png
+    - assets/images/bc7.jpeg
+    - assets/images/bc8.jpeg
+    - assets/images/bc9.jpeg
+    - assets/images/bc10.jpeg
+    - assets/images/gen1.jpg
+    - assets/images/gen2.png
+    - assets/images/gen3.jpeg
+    - assets/images/gen4.jpeg
+    - assets/images/gen5.png
+    - assets/images/gen6.png
+    - assets/images/gen7.jpg
+    - assets/images/gen8.png
+    - assets/images/gen9.jpeg
+    - assets/images/gen10.jpeg
+    - assets/images/breastfeed.jpg
+    - 'assets/images/baby.jpg'
+    - assets/images/edit.png
+    - assets/images/breastfeed.jpg
+    - assets/images/bottle.jpg
+    - assets/images/diaper.jpg
+    - assets/images/food.jpeg
+
 
     # Add more images if needed later
     # - assets/images/hands.png

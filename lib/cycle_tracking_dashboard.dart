@@ -66,6 +66,23 @@ class _CycleTrackingDashboardState extends State<CycleTrackingDashboard> {
   // Symptoms tracking
   List<String> _selectedSymptoms = ['Cramps', 'Bloating'];
   int _painLevel = 3; // Scale of 1-5, 3 is moderate
+
+  String _getPainLevelText() {
+    switch (_painLevel) {
+      case 1:
+        return "Mild";
+      case 2:
+        return "Moderate";
+      case 3:
+        return "Severe";
+      case 4:
+        return "Very Severe";
+      case 5:
+        return "Extreme";
+      default:
+        return "Unknown";
+    }
+  }
   
   @override
   void initState() {
@@ -227,16 +244,16 @@ class _CycleTrackingDashboardState extends State<CycleTrackingDashboard> {
       context: context,
       builder: (context) => Dialog(
         child: Container(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(10),
           width: double.maxFinite,
-          height: 500,
+          height: 600,
           child: Column(
             children: [
               const Text(
                 "Your Cycle Prediction",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
               Expanded(
                 child: TableCalendar(
                   firstDay: DateTime.now().subtract(const Duration(days: 365)),
@@ -565,377 +582,314 @@ class _CycleTrackingDashboardState extends State<CycleTrackingDashboard> {
   );
 }
   // Community Section
-  Widget _buildCommunitySection() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text(
-                "Community",
-                style: TextStyle(
-                  fontSize: 18, 
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              Text(
-                "Join Now",
-                style: TextStyle(
-                  color: Colors.pink, 
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.purple.shade50,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Connect with others",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold, 
-                    fontSize: 16,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                const Text(
-                  "Join supportive communities for PCOS, pregnancy, and more.",
-                  style: TextStyle(
-                    fontSize: 14,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Transform.translate(
-                      offset: const Offset(0, 0),
-                      child: CircleAvatar(
-                        radius: 18,
-                        backgroundColor: Colors.teal,
-                        child: const Icon(Icons.person, color: Colors.white, size: 18),
-                      ),
-                    ),
-                    Transform.translate(
-                      offset: const Offset(-12, 0),
-                      child: CircleAvatar(
-                        radius: 18,
-                        backgroundColor: Colors.orange,
-                        child: const Icon(Icons.person, color: Colors.white, size: 18),
-                      ),
-                    ),
-                    Transform.translate(
-                      offset: const Offset(-24, 0),
-                      child: CircleAvatar(
-                        radius: 18,
-                        backgroundColor: Colors.blue,
-                        child: const Icon(Icons.person, color: Colors.white, size: 18),
-                      ),
-                    ),
-                    Transform.translate(
-                      offset: const Offset(-36, 0),
-                      child: Container(
-                        width: 36,
-                        height: 36,
-                        decoration: const BoxDecoration(
-                          color: Colors.pink,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Center(
-                          child: Text(
-                            "+426",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-  
-  // Today's Symptoms Section
-
-  Widget _buildSymptomChip(String symptom) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: const Color(0xFFFFE0E5),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            symptom,
-            style: const TextStyle(
-              color: Color(0xFFFF4D6A),
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(width: 4),
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                _selectedSymptoms.remove(symptom);
-              });
-            },
-            child: const Icon(
-              Icons.close,
-              color: Color(0xFFFF4D6A),
-              size: 18,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAddSymptomChip() {
-    return GestureDetector(
-      onTap: _showAddSymptomDialog,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: Colors.grey.shade200,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
+ Widget _buildCommunitySection() {
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: const [
-            Icon(
-              Icons.add,
-              color: Colors.black54,
-              size: 18,
-            ),
-            SizedBox(width: 4),
             Text(
-              "Add",
+              "Community",
               style: TextStyle(
-                color: Colors.black54,
+                fontSize: 18, 
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+            ),
+            Text(
+              "Join Now",
+              style: TextStyle(
+                color: Colors.pink, 
                 fontWeight: FontWeight.w500,
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  String _getPainLevelText() {
-    switch (_painLevel) {
-      case 1:
-        return 'Mild';
-      case 2:
-        return 'Mild+';
-      case 3:
-        return 'Moderate';
-      case 4:
-        return 'Severe';
-      case 5:
-        return 'Very Severe';
-      default:
-        return 'None';
-    }
-  }
-
-  void _showAddSymptomDialog() {
-    List<String> commonSymptoms = [
-      'Headache',
-      'Backache',
-      'Fatigue',
-      'Mood Swings',
-      'Breast Tenderness',
-      'Acne',
-      'Nausea',
-      'Food Cravings',
-      'Insomnia',
-      'Dizziness'
-    ];
-    
-    // Filter out already selected symptoms
-    commonSymptoms = commonSymptoms.where((s) => !_selectedSymptoms.contains(s)).toList();
-    
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("Add Symptom"),
-        content: SizedBox(
-          width: double.maxFinite,
-          child: ListView(
-            shrinkWrap: true,
+        const SizedBox(height: 10),
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.purple.shade50,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ...commonSymptoms.map((symptom) => ListTile(
-                title: Text(symptom),
-                onTap: () {
-                  setState(() {
-                    _selectedSymptoms.add(symptom);
-                  });
-                  Navigator.pop(context);
-                },
-              )),
-              ListTile(
-                leading: const Icon(Icons.add),
-                title: const Text("Custom symptom"),
-                onTap: () => _showCustomSymptomDialog(),
-              ),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("Cancel"),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showCustomSymptomDialog() {
-    final TextEditingController controller = TextEditingController();
-    
-    Navigator.pop(context); // Close the previous dialog
-    
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("Add Custom Symptom"),
-        content: TextField(
-          controller: controller,
-          decoration: const InputDecoration(
-            hintText: "Enter symptom name",
-          ),
-          autofocus: true,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("Cancel"),
-          ),
-          TextButton(
-            onPressed: () {
-              if (controller.text.isNotEmpty) {
-                setState(() {
-                  _selectedSymptoms.add(controller.text.trim());
-                });
-              }
-              Navigator.pop(context);
-            },
-            child: const Text("Add"),
-          ),
-        ],
-      ),
-    );
-  }
-
-  
-  // Old Symptoms section (replaced by enhanced version)
-  Widget _buildSymptomsSection() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            "Today's Symptoms",
-            style: TextStyle(
-              fontSize: 18, 
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    ..._selectedSymptoms.map((symptom) => _buildSymptomChip(symptom)),
-                    const SizedBox(width: 8),
-                    _buildAddSymptomChip(),
-                  ],
+              const Text(
+                "Connect with others",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold, 
+                  fontSize: 16,
                 ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    const Text(
-                      "Pain level",
-                      style: TextStyle(
-                        fontSize: 14,
-                      ),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                "Join supportive communities for PCOS, pregnancy, and more.",
+                style: TextStyle(
+                  fontSize: 14,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Transform.translate(
+                    offset: const Offset(0, 0),
+                    child: CircleAvatar(
+                      radius: 18,
+                      backgroundColor: Colors.teal,
+                      child: const Icon(Icons.person, color: Colors.white, size: 18),
                     ),
-                    const SizedBox(width: 12),
-                    Row(
-                      children: List.generate(
-                        5, 
-                        (index) => Container(
-                          width: 16,
-                          height: 16,
-                          margin: const EdgeInsets.symmetric(horizontal: 2),
-                          decoration: BoxDecoration(
-                            color: index < _painLevel ? Colors.redAccent : Colors.grey.shade300,
-                            shape: BoxShape.circle,
+                  ),
+                  Transform.translate(
+                    offset: const Offset(-12, 0),
+                    child: CircleAvatar(
+                      radius: 18,
+                      backgroundColor: Colors.orange,
+                      child: const Icon(Icons.person, color: Colors.white, size: 18),
+                    ),
+                  ),
+                  Transform.translate(
+                    offset: const Offset(-24, 0),
+                    child: CircleAvatar(
+                      radius: 18,
+                      backgroundColor: Colors.blue,
+                      child: const Icon(Icons.person, color: Colors.white, size: 18),
+                    ),
+                  ),
+                  Transform.translate(
+                    offset: const Offset(-36, 0),
+                    child: Container(
+                      width: 36,
+                      height: 36,
+                      decoration: const BoxDecoration(
+                        color: Colors.pink,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "+426",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
-                    Text(
-                      _getPainLevelText(),
-                      style: const TextStyle(
-                        fontSize: 14,
-                      ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+// Adjusted Today's Symptoms Section
+Widget _buildSymptomChip(String symptom) {
+  return Chip(
+    label: Text(symptom),
+    deleteIcon: const Icon(Icons.close, size: 18),
+    onDeleted: () {
+      setState(() {
+        _selectedSymptoms.remove(symptom);
+      });
+    },
+    backgroundColor: Colors.pink.shade50,
+    deleteIconColor: Colors.pink,
+    labelStyle: const TextStyle(color: Colors.pink),
+  );
+}
+
+Widget _buildAddSymptomChip() {
+  return ActionChip(
+    avatar: const Icon(Icons.add, size: 18),
+    label: const Text('Add Symptom'),
+    backgroundColor: Colors.grey.shade200,
+    onPressed: () {
+      _showAddSymptomDialog();
+      // Handle adding new symptom
+      // You can show a dialog or navigate to symptom selection screen
+    },
+  );
+}
+void _showAddSymptomDialog() {
+  List<String> commonSymptoms = [
+    'Headache',
+    'Backache',
+    'Fatigue',
+    'Mood Swings',
+    'Breast Tenderness',
+    'Acne',
+    'Nausea',
+    'Food Cravings',
+    'Insomnia',
+    'Dizziness'
+  ];
+   commonSymptoms = commonSymptoms.where((s) => !_selectedSymptoms.contains(s)).toList();
+    showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text("Add Symptom"),
+      content: SizedBox(
+        width: double.maxFinite,
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            ...commonSymptoms.map((symptom) => ListTile(
+              title: Text(symptom),
+              onTap: () {
+                setState(() {
+                  _selectedSymptoms.add(symptom);
+                });
+                Navigator.pop(context);
+              },
+            )),
+            ListTile(
+              leading: const Icon(Icons.add),
+              title: const Text("Custom symptom"),
+              onTap: () => _showCustomSymptomDialog(),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text("Cancel"),
+        ),
+      ],
+    ),
+  );
+}
+void _showCustomSymptomDialog() {
+  final TextEditingController controller = TextEditingController();
+  
+  Navigator.pop(context); // Close the previous dialog
+  
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text("Add Custom Symptom"),
+      content: TextField(
+        controller: controller,
+        decoration: const InputDecoration(
+          hintText: "Enter symptom name",
+        ),
+        autofocus: true,
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text("Cancel"),
+        ),
+        TextButton(
+          onPressed: () {
+            if (controller.text.isNotEmpty) {
+              setState(() {
+                _selectedSymptoms.add(controller.text.trim());
+              });
+            }
+            Navigator.pop(context);
+          },
+          child: const Text("Add"),
+        ),
+      ],
+    ),
+  );
+}
+Widget _buildSymptomsSection() {
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "Today's Symptoms",
+          style: TextStyle(
+            fontSize: 18, 
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+        const SizedBox(height: 25),
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Wrap(
+                spacing: 8.0, // Adjust spacing to avoid overflow
+                runSpacing: 8.0,
+                children: [
+                  ..._selectedSymptoms.map((symptom) => _buildSymptomChip(symptom)),
+                  _buildAddSymptomChip(),
+                ],
+              ),
+              const SizedBox(height: 20), // Adjusted space
+              Row(
+                children: [
+                  const Text(
+                    "Pain level",
+                    style: TextStyle(
+                      fontSize: 14,
                     ),
-                    const Spacer(),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.redAccent,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: const Text(
-                        "Log",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
+                  ),
+                  const SizedBox(width: 12),
+                  Row(
+                    children: List.generate(
+                      5, 
+                      (index) => Container(
+                        width: 10,
+                        height: 10,
+                        margin: const EdgeInsets.symmetric(horizontal: 2),
+                        decoration: BoxDecoration(
+                          color: index < _painLevel ? Colors.redAccent : Colors.grey.shade300,
+                          shape: BoxShape.circle,
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                  const SizedBox(width: 20),
+                  Text(
+                    _getPainLevelText(),
+                    style: const TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10), // Adjusted padding
+                    decoration: BoxDecoration(
+                      color: Colors.redAccent,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: const Text(
+                      "Log",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
   
   
   Widget _buildInsightCard({
@@ -1029,8 +983,8 @@ class _CycleTrackingDashboardState extends State<CycleTrackingDashboard> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        width: 40,
-                        height: 40,
+                        width: 110,
+                        height: 80,
                         decoration: BoxDecoration(
                           color: Colors.purple.shade300,
                           shape: BoxShape.circle,

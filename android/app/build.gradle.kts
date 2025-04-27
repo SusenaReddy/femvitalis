@@ -9,39 +9,57 @@ plugins {
 }
 
 android {
-    namespace = "com.example.femvitalis"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    compileSdkVersion(35)
+    ndkVersion = "27.0.12077973"  // Ensure the correct NDK version is used
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+    defaultConfig {
+        minSdkVersion(21)
+        targetSdkVersion(35)
+        namespace = "com.femvitalis"
+        // Define versionCode and versionName here
+        versionCode = 1  // Set your version code here
+        versionName = "1.0.0"  // Set your version name here
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = "1.8"
     }
 
-    defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.femvitalis"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    buildFeatures {
+        viewBinding = true
+    }
+
+    dependencies {
+        // Add this line to enable core library desugaring
+        coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
     }
 
     buildTypes {
-        release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+        getByName("release") {
+            // Add your signing configuration here (if needed)
             signingConfig = signingConfigs.getByName("debug")
         }
+    }
+}
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("com.google.gms:google-services:4.3.15") // Correct classpath syntax in Kotlin DSL
+        classpath("com.android.tools.build:gradle:7.0.4") // Ensure correct Gradle plugin version
     }
 }
 
 flutter {
     source = "../.."
 }
+
+apply(plugin = "com.google.gms.google-services") // Correct apply syntax in Kotlin DSL

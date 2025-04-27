@@ -3,18 +3,9 @@ import 'dart:async';
 import 'cycle_tracking_dashboard.dart';
 import 'pregnancy_dashboard.dart';
 import 'new_mother_dashboard.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: FirebaseOptions(
-      apiKey: 'AIzaSyB9r2OOO5sJCeHEL1exuNWpl6GZdKioDV8',
-      appId: '1:803526502098:android:ce67a23f6aa24f804c2f0b',
-      messagingSenderId: '803526502098',
-      projectId: 'femvitalis-6f5b6',
-    ),
-  );
   runApp(const FemVitalisApp());
 }
 
@@ -1545,7 +1536,7 @@ class GoalCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 250,
+      height: 190,
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(20),
@@ -1563,14 +1554,14 @@ class GoalCard extends StatelessWidget {
             right: 0,
             top: 0,
             bottom: 0,
-            width: 350,
+            width: 300,
             child: ClipRRect(
               borderRadius: const BorderRadius.only(
                 topRight: Radius.circular(20),
                 bottomRight: Radius.circular(20),
               ),
               child: Opacity(
-                opacity: 0.9,
+                opacity: 0.1,
                 child: Image.asset(
                   imagePath,
                   fit: BoxFit.cover,
@@ -1610,7 +1601,7 @@ class GoalCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     SizedBox(
-                      width: 180,
+                      width: 250,
                       child: Text(
                         subtitle,
                         style: TextStyle(

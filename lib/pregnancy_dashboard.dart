@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 void main() {
   runApp(const MyApp());
@@ -715,7 +714,7 @@ class _PregnancyTrackerState extends State<PregnancyTracker> {
           
           // Bottom navigation bar
           Container(
-            height: 60,
+            height: 80,
             decoration: BoxDecoration(
               border: Border(
                 top: BorderSide(color: Colors.grey.shade300),
@@ -1716,7 +1715,6 @@ class _HomeScreenState extends State<HomeScreen> {
   DateTime _selectedDay = DateTime.now();
   List<Appointment> appointments = [];
   int _selectedIndex = 2; // Default to Tools tab
-  FlutterLocalNotificationsPlugin? flutterLocalNotificationsPlugin;
   int selectedToolIndex = 0;
 
   List<Map<String, dynamic>> pregnancyData = [
@@ -2019,56 +2017,6 @@ class _HomeScreenState extends State<HomeScreen> {
   TimeOfDay selectedTime = TimeOfDay.now();
   bool setReminder = true;
 
-  @override
-  void initState() {
-    super.initState();
-    _initializeNotifications();
-  }
-
-  void _initializeNotifications() {
-    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    var initializationSettingsAndroid = AndroidInitializationSettings('app_icon');
-    var initializationSettingsIOS = DarwinInitializationSettings();
-    var initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid,
-      iOS: initializationSettingsIOS,
-    );
-    flutterLocalNotificationsPlugin!.initialize(initializationSettings);
-  }
-
-  Future<void> _scheduleNotification(Appointment appointment) async {
-    if (!appointment.reminder) return;
-
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'appointment_channel_id',
-      'Appointments',
-      channelDescription: 'Appointment reminders',
-      importance: Importance.max,
-      priority: Priority.high,
-    );
-    var iOSPlatformChannelSpecifics = DarwinNotificationDetails();
-    var platformChannelSpecifics = NotificationDetails(
-      android: androidPlatformChannelSpecifics,
-      iOS: iOSPlatformChannelSpecifics,
-    );
-
-    // Schedule notification for 24 hours before appointment
-    var scheduledDate = DateTime(
-      appointment.date.year,
-      appointment.date.month,
-      appointment.date.day,
-      appointment.time.hour,
-      appointment.time.minute,
-    ).subtract(Duration(days: 1));
-
-    await flutterLocalNotificationsPlugin!.schedule(
-      appointments.length, // Using length as a unique ID
-      'Upcoming Appointment: ${appointment.title}',
-      'Tomorrow at ${appointment.time.format(context)} with Dr. ${appointment.doctor} at ${appointment.hospital}',
-      scheduledDate,
-      platformChannelSpecifics,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -2667,9 +2615,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           notesController.clear();
                         });
                         
-                        if (setReminder) {
-                          _scheduleNotification(newAppointment);
-                        }
                       }
                     },
                     style: ElevatedButton.styleFrom(

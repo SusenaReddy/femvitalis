@@ -98,8 +98,8 @@ class _BabyHomePageState extends State<BabyHomePage> {
           children: [
             Image.asset(
               imagePath,
-              height: 300,
-              width: 300,
+              height: 60,
+              width: 60,
               fit: BoxFit.contain,
               
             ),
@@ -797,16 +797,16 @@ class _BottlePageState extends State<BottlePage> {
                   ],
                 ),
               ),
-              SizedBox(height: 24),
+              SizedBox(height: 25),
               Container(
-                padding: EdgeInsets.all(24),
+                padding: EdgeInsets.all(15),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(25),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 2,
+                      spreadRadius: 5,
                       blurRadius: 10,
                       offset: Offset(0, 2),
                     ),
